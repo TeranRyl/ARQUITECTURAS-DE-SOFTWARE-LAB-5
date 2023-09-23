@@ -68,7 +68,7 @@ public class BlueprintsServices {
 		return bpf.bluePrintFiltering(bp);
 	}
 
-	public void setBlueprint(String author, String name, Blueprint bp) throws BlueprintPersistenceException {
+	public void setBlueprint(String author, String name, Blueprint bp) {
 		bpp.setBlueprint(author, name, bp);
 	}
 }

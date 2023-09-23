@@ -88,14 +88,18 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
 		return blueprintsByAuthor;
 	}
 	@Override
-	public void setBlueprint(String author, String bprintname, Blueprint bp) throws BlueprintPersistenceException {
+	public void setBlueprint(String author, String bprintname, Blueprint bp) {
 		if (blueprints.containsKey(new Tuple<>(bp.getAuthor(), bp.getName()))) {
-			throw new BlueprintPersistenceException("The given blueprint already exists: " + bp);
+			try {
+				throw new BlueprintPersistenceException("The given blueprint already exists: " + bp);
+			} catch (BlueprintPersistenceException e) {
+				throw new RuntimeException(e);
+			}
 		} else {
-			Blueprint bluePrint = new Blueprint(author, bprintname);
+			blueprints.remove(new Tuple<>(author, bprintname));
+			Blueprint bluePrint = new Blueprint(bp.getAuthor(), bp.getName());
 			bluePrint.setPoints(bp.getPoints());
-			blueprints.remove(new Tuple<>(bp.getAuthor(), bp.getName()));
-			blueprints.put(new Tuple<>(bp.getAuthor(), bp.getName()), bluePrint);
+			blueprints.put(new Tuple<>(bluePrint.getAuthor(), bluePrint.getName()), bluePrint);
 		}
 	}
 }
